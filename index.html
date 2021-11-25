@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Cursor</title>
+    <link rel="stylesheet" type="text/css" href="css/locomotive-scroll.css">
+    <style>
+    @import url('https://fonts.googleapis.com/css?family=Signika+Negative:300,400&display=swap');
+
+    body {
+        font-family: "Signika Negative", sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+    }
+
+    .container {
+        overflow: hidden !important;
+    }
+
+    img {
+        max-width: 100%;
+    }
+
+    section {
+        height: 100vh;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    section .heading {
+        position: relative;
+        margin: auto;
+        color: darkgoldenrod;
+        font-size: 40px;
+        z-index: 3;
+    }
+
+    section .text {
+        position: relative;
+        margin: auto;
+        color: white;
+        font-size: 32px;
+        z-index: 3;
+    }
+
+    section.green {
+        background: lightblue;
+    }
+
+    section.grey {
+        background: grey;
+    }
+
+    section.red {
+        background: steelblue;
+    }
+    .cursor {
+        position: absolute;
+        top: -10000px;
+        left: -10000px;
+        z-index: 2000;
+        border-radius: 50%;
+        pointer-events: none;
+        height: 25px;
+        width: 25px;
+        border: 2px solid #000;
+        transition: left 0.06s, top 0.06s, transform 0.3s;
+        transition-timing-function: ease-out;
+        transform: scale(0);
+    }
+
+    * {
+        cursor: none;
+    }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="cursor"></div>
+        <section class="green">
+            <div class="heading title">ScrollTrigger & Smooth-Scrollbar</div>
+            <div class="bottle-wrapper">
+                <canvas class="canvas"></canvas>
+            </div>
+        </section>
+        <section class="grey">
+            <div class="text title">Section 2</div>
+        </section>
+        <section class="red">
+            <div class="text title">Section 3</div>
+        </section>
+    </div>
+    <script>
+
+    //move cursor
+    const circle = document.querySelector('.cursor');
+    const title = document.querySelectorAll('.title');
+    var circleTop = 0,
+        circleLeft = 0;
+
+    document.addEventListener('mouseenter', e => {
+        circle.style.transform = 'scale(1)';
+    });
+
+    document.addEventListener('mouseleave', e => {
+        circle.style.transform = 'scale(0)';
+    });
+
+    title.forEach(function(element, i) {
+        element.addEventListener('mouseenter', e => {
+            circle.style.backgroundColor = '#000';
+            circle.style.transform = 'scale(0.6)';
+        });
+
+        element.addEventListener('mouseleave', e => {
+            circle.style.backgroundColor = '';
+            circle.style.transform = 'scale(1)';
+        });
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        circleLeft = e.clientX - circle.offsetHeight / 2;
+        circleTop = e.clientY - circle.offsetWidth / 2;
+    });
+
+    const mouseMove = () => {
+        circle.style.transition = 'left 0.06s ease-out, top 0.06s ease-out, transform 0.3s ease-out';
+        circle.style.top = window.scrollY + circleTop + 'px';
+        circle.style.left = circleLeft + 'px';
+
+        window.requestAnimationFrame(mouseMove);
+    }
+    mouseMove();
+    </script>
+</body>
+
+</html>
